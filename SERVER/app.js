@@ -112,7 +112,7 @@ app.post("/checkTime", function(req, res){
 
     try {
         let available = true
-        //check if time slot is available
+        available = checkAvailable(newTime.day, newTime.start, newTime.end)
 
         if (available) {
             res.status(200).header("Content-Type", "text/plain").send("Available");
@@ -127,12 +127,39 @@ app.post("/checkTime", function(req, res){
     }
 });
 
-
 app.get('/', function(req, resp){
    resp.send('Server is running')
 })
 
+app.get('/timetable', function(req, res){
+    try {
+        let timetable = generateTimetable();
+        res.status(200).header("Content-Type", "application/json").send(timetable);
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
 
+
+function checkAvailable(day, startTime, endTime){
+    
+    //check availability of the time slot
+    //check tasks
+    //check commitments
+
+    return true;
+}
+
+
+function generateTimetable(){
+    const file = fs.readFileSync(commitmentsFilePath, "utf8");
+    let commitments = JSON.parse(file);
+
+    //turn each task into a commitment, slotting it into the timetable
+    //we need some way to tell the difference between tasks and commitments
+
+    return commitments;
+}
 
 
 module.exports = app;
