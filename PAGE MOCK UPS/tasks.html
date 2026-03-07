@@ -20,17 +20,22 @@
         <p> Task Name: <input type = "textbox"></p>
         <p> <input type = "checkbox" id = "has_deadline"> The task has a deadline </p>
         <p> <input type = "datetime-local" id = "deadline"> </p> <!-- Make this appear if textbox above is checked -->
-        <p>How long should this task take approximately? <br> <input type = "textbox"> Hours <input type = "textbox"> Minutes </p> 
+        <p>How long should this task take approximately? <br> <input type = "textbox"> Hours </p> 
         <p> Priority of task <select name = priority>
             <option value = "default_priority"> Select a Priority</option>
             <option value = "low"> Low </option>
             <option value = "medium"> Medium </option>
             <option value = "high"> High </option>
         </select></p>
-        <!--<p> Type of task <select>
-            <option> </option>
+        <p> Type of task <select>
+            <option value = "lecture_catch_up"> Lecture Catch Up </option>
+            <option value = "summative_coursework"> Summative Coursework </option>
+            <option value = "summative_assignemnt"> Summative Assignment </option>
+            <option value = "formative_assignment"> Formative Assignment </option>
+            <option value = "revision"> Revision </option>
+            <option value = "other"> Other </option>
         </select></p>
-        <p> Module: <input type = "textbox"> </p> -->
+        <p> Module (use "Other" for non academic events): <input type = "textbox"> </p>
         <p><button>Add this task</button></p>
     </body>
 </html>
