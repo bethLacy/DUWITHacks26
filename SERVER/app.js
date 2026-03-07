@@ -103,6 +103,9 @@ app.get('/reset', function(req, res){
         // reset end date file
         fs.writeFileSync(endFilePath, JSON.stringify([], null, 2));
 
+        // reset timetable file
+        fs.writeFileSync(timetableFilePath, JSON.stringify(null , null, 2));
+
         res.status(200).header("Content-Type", "text/plain").send("The storage files were reset successfully");
     } catch (e) {
         res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
