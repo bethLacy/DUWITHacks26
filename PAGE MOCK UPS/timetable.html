@@ -20,20 +20,21 @@
         Module?
         Type of event - done
         -->
-        <p> Event name: <input type = "textbox"></p>
+        <form>
+        <p> Commitment name: <input type = "textbox"></p>
         <p> Date: <input type = "date"> Start Time: <input type = "time"> End Time: <input type = "time"> </p>
         <p> <select>
-            <option value = "default_event"> Select a Type of Event</option>
+            <option value = "default_commitment"> Select a Type of Commitment</option>
             <option value = "lecture"> Lecture</option>
             <option value = "practical"> Practical</option>
             <option value = "meeting"> Meeting </option>
             <option value = "other_academic"> Other Academic</option>
-            <option value = ""> Societies </option>
+            <option value = "societies"> Societies </option>
             <option value = "other"> Other Non Academic </option>
         </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox"> </p> <!-- Make this appear if type of event is a lecture / practical etc.-->
-        
-        <p><button>Add this event</button></p>
+        <p> Module (use "Other" for non academic events): <input type = "textbox"> </p>
+        <p><input type = "submit" value = "Add this Commitment"></p>
+        </form>
 
         <!--<div id = "loadSpace"></div>
 
