@@ -6,9 +6,9 @@ const commitmentsDataFile = process.env.commitments_file || "STORAGE/commitments
 const commitmentsFilePath = path.join(__dirname, commitmentsDataFile);
 const tasksDataFile = process.env.tasks_file || "STORAGE/tasks.json";
 const tasksFilePath = path.join(__dirname, tasksDataFile);
-const dayDataFile = process.env.tasks_file || "STORAGE/day.json";
+const dayDataFile = process.env.day_file || "STORAGE/day.json";
 const dayFilePath = path.join(__dirname, dayDataFile);
-const endDataFile = process.env.tasks_file || "STORAGE/endDate.json";
+const endDataFile = process.env.end_file || "STORAGE/endDate.json";
 const endFilePath = path.join(__dirname, endDataFile);
 
 const express = require('express');
@@ -25,7 +25,7 @@ app.post("/newTask", function(req, res){
     try {
         const file = fs.readFileSync(tasksFilePath, "utf8");
         const tasks = JSON.parse(file);
-        games.push(newTask);
+        tasks.push(newTask);
         fs.writeFileSync(tasksFilePath, JSON.stringify(tasks, null, 2));
         res.status(200).header("Content-Type", "text/plain").send("New task added");
     } 
@@ -142,23 +142,178 @@ app.get('/timetable', function(req, res){
 
 
 function checkAvailable(day, startTime, endTime){
-    
-    //check availability of the time slot
-    //check tasks
-    //check commitments
 
-    return true;
+    // read existing commitments
+    const file = fs.readFileSync(commitmentsFilePath, "utf8");
+    const commitments = JSON.parse(file);
+
+    for (let commitment of commitments) {
+
+        // only check the same day
+        if (commitment.day === day) {
+
+            const start = toMinutes(startTime);
+            const end = toMinutes(endTime);
+            const existingStart = toMinutes(commitment.start);
+            const existingEnd = toMinutes(commitment.end);
+
+            // check for overlap
+            if (start < existingEnd && end > existingStart) {
+                return false; // collision detected
+            }
+        }
+    }
+
+    return true; // no collisions
+}
+
+function toMinutes(time){
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
 }
 
 
-function generateTimetable(){
-    const file = fs.readFileSync(commitmentsFilePath, "utf8");
-    let commitments = JSON.parse(file);
+// ======================================================
+// ===== TIMETABLE ALGORITHM ==================
+// ======================================================
 
-    //turn each task into a commitment, slotting it into the timetable
-    //we need some way to tell the difference between tasks and commitments
+
+// NEW: main scheduling algorithm
+function generateTimetable(){
+
+    // read all stored data
+    const commitments = JSON.parse(fs.readFileSync(commitmentsFilePath, "utf8"));
+    const tasks = JSON.parse(fs.readFileSync(tasksFilePath, "utf8"));
+    const dayLimits = JSON.parse(fs.readFileSync(dayFilePath, "utf8"))[0];
+    const endDateData = JSON.parse(fs.readFileSync(endFilePath, "utf8"))[0];
+
+    const startDay = toMinutes(dayLimits["start of day"]);
+    const endDay = toMinutes(dayLimits["end of day"]);
+
+    const today = new Date();
+    const endDate = parseDate(endDateData.endDate);
+
+
+    // NEW: sort tasks by priority then deadline
+    const priorityOrder = {high:3, medium:2, low:1};
+
+    tasks.sort((a,b)=>{
+
+        if(priorityOrder[b.priority] !== priorityOrder[a.priority]){
+            return priorityOrder[b.priority] - priorityOrder[a.priority];
+        }
+
+        if(a.deadline === "none") return 1;
+        if(b.deadline === "none") return -1;
+
+        return parseDate(a.deadline) - parseDate(b.deadline);
+    });
+
+
+    // NEW: schedule each task
+    for(let task of tasks){
+
+        let duration = parseDuration(task.timeToComplete);
+        let placed = false;
+
+        let taskDeadline = task.deadline === "none"
+            ? endDate
+            : parseDate(task.deadline);
+
+        for(let date = new Date(today); date <= taskDeadline; date.setDate(date.getDate()+1)){
+
+            let dateString = formatDate(date);
+
+            let slots = getFreeSlots(dateString, commitments, startDay, endDay);
+
+            for(let slot of slots){
+
+                if(slot.end - slot.start >= duration){
+
+                    const start = slot.start;
+                    const end = start + duration;
+
+                    commitments.push({
+                        name: task.name,
+                        date: dateString,
+                        startTime: minutesToTime(start),
+                        endTime: minutesToTime(end),
+                        module: task.module,
+                        category: task.category
+                    });
+
+                    placed = true;
+                    break;
+                }
+            }
+
+            if(placed) break;
+        }
+
+        if(!placed){
+            throw new Error("Task could not be scheduled: " + task.name);
+        }
+    }
 
     return commitments;
+}
+
+
+//find free time slots between commitments
+function getFreeSlots(date, commitments, startDay, endDay){
+
+    const dayCommitments = commitments
+        .filter(c => c.date === date)
+        .sort((a,b)=> toMinutes(a.startTime)-toMinutes(b.startTime));
+
+    let slots = [];
+    let current = startDay;
+
+    for(let c of dayCommitments){
+
+        const cStart = toMinutes(c.startTime);
+
+        if(cStart > current){
+            slots.push({start: current, end: cStart});
+        }
+
+        current = toMinutes(c.endTime);
+    }
+
+    if(current < endDay){
+        slots.push({start: current, end: endDay});
+    }
+
+    return slots;
+}
+
+
+//convert task duration like "1hr" into minutes
+function parseDuration(str){
+    return parseInt(str.replace("hr","")) * 60;
+}
+
+
+//parse date "9.3.26"
+function parseDate(str){
+    const [d,m,y] = str.split(".");
+    return new Date(`20${y}`, m-1, d);
+}
+
+
+//convert Date into "9.3.26"
+function formatDate(date){
+    return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()%100}`;
+}
+
+
+//convert minutes into "HH:MM"
+function minutesToTime(min){
+
+    const h = Math.floor(min/60);
+    const m = min%60;
+
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
 }
 
 
