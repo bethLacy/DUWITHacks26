@@ -85,3 +85,4 @@ finishButton.addEventListener("click", finishButtonClicked);
 function generateButtonClicked() {
     loadSpace.innerHTML = `<p>Generated timetable goes here</p>`;
 }
+
