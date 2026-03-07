@@ -52,12 +52,62 @@ app.post("/newCommitment", function(req, res){
     }
 });
 
-app.post("/")
+app.post("/newDayLimits", function(req, res){
+
+    let newDayLimits = req.body;
+
+    try {
+        const file = fs.readFileSync(dayFilePath, "utf8");
+        const days = JSON.parse(file);
+        days.push(newDayLimits);
+        fs.writeFileSync(dayFilePath, JSON.stringify(days, null, 2));
+        res.status(200).header("Content-Type", "text/plain").send("New day limit added");
+    } 
+    catch (e) 
+    {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+app.post("/newEndDate", function(req, res){
+
+    let newEndDate = req.body;
+
+    try {
+        const file = fs.readFileSync(endFilePath, "utf8");
+        const days = JSON.parse(file);
+        days.push(newEndDate);
+        fs.writeFileSync(endFilePath, JSON.stringify(days, null, 2));
+        res.status(200).header("Content-Type", "text/plain").send("New end date added");
+    } 
+    catch (e) 
+    {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+app.get('/reset', function(req, res){
+    try {
+        //reset task file
+        
+
+        //reset commitment file
 
 
+        //reset day limit file
+
+
+        //reset end date file
+
+
+        res.status(200).header("Content-Type", "text/plain").send("The storage files were reset successfully");
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
 
 app.get('/', function(req, resp){
-   resp.send('Hello world')
+   resp.send('Server is running')
 })
 
 module.exports = app;
