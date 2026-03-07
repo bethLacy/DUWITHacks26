@@ -10,6 +10,8 @@ const dayDataFile = process.env.day_file || "STORAGE/day.json";
 const dayFilePath = path.join(__dirname, dayDataFile);
 const endDataFile = process.env.end_file || "STORAGE/endDate.json";
 const endFilePath = path.join(__dirname, endDataFile);
+const timetableDataFile = process.env.timetable_file || "STORAGE/timetable.json";
+const timetableFilePath = path.join(__dirname, timetableDataFile);
 
 const express = require('express');
 const app = express();
@@ -88,6 +90,7 @@ app.post("/newEndDate", function(req, res){
 
 app.get('/reset', function(req, res){
     try {
+
         // reset task file
         fs.writeFileSync(tasksFilePath, JSON.stringify([], null, 2));
 
@@ -137,10 +140,11 @@ app.get('/timetable', function(req, res){
         let result = generateTimetable();
 
         if(!result.success){
-            return res.status(400).json(result);
+            res.status(400).header("Content-Type", "application/json").send(result);
         }
 
-        res.status(200).json(result);
+        fs.writeFileSync(timetableFilePath, JSON.stringify(result.commitments, null, 2));
+        res.status(200).header("Content-Type", "application/json").send(result);
 
     } catch (e) {
         res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
@@ -180,8 +184,6 @@ function toMinutes(time){
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
 }
-
-
 
 
 
