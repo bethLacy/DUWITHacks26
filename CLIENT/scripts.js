@@ -26,11 +26,11 @@ const finishButton = document.getElementById("finishButton");
 
 
 function timetableButtonClicked() {
-    loadSpace.innerHTML = `<form>
-        <p> Commitment name: <input type = "textbox"></p>
-        <p> Date: <input type = "date"> Start Time: <input type = "time"> End Time: <input type = "time"> </p>
-        <p> <select>
-            <option value = "default_commitment"> Select a Type of Commitment</option>
+    loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
+        <p> Commitment name: <input type = "textbox" id = "commitment_name" name = "commitment_name"></p>
+        <p> Date: <input type = "textbox" id = "commitment_date" name = "commitment_date"> Start Time: <input type = "textbox" id = "commitment_start_time" name = "commitment_start_time"> End Time: <input type = "textbox" id = "commitment_end_time" name = "commitment_end_time"> </p>
+        <p> <select id = "commitment_type" name = "commitment_type">
+            <option value = "default_commitment_type"> Select a Type of Commitment</option>
             <option value = "lecture"> Lecture</option>
             <option value = "practical"> Practical</option>
             <option value = "meeting"> Meeting </option>
@@ -38,22 +38,23 @@ function timetableButtonClicked() {
             <option value = "societies"> Societies </option>
             <option value = "other"> Other Non Academic </option>
         </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox"> </p>
-        <p><input type = "submit" value = "Add this Commitment"></p>
+        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "commitment_module"> </p>
+        <p><input type = "submit" id = "commitment_submit_button" name = "commitment_submit_button" value = "Add this Commitment"></p>
         </form>`;
 }
 function taskButtonClicked() {
-    loadSpace.innerHTML = `<form>
-        <p> Task Name: <input type = "textbox"></p>
-        <p> Deadline: <input type = "datetime-local" id = "deadline"> </p> <!-- Make this appear if textbox above is checked -->
-        <p>How long should this task take approximately? <br> <input type = "textbox"> Hours </p> 
-        <p> Priority of task <select name = priority>
+    loadSpace.innerHTML = `<form id = "add_task_form" name = "add_task_form">
+        <p> Task Name: <input type = "textbox" id = "task_name" name = "task_name"></p>
+        <p> Deadline Day: <input type = "textbox" id = "deadline_day" name = "deadline_day> </p>
+        <p> Deadline Time: <input type = "textbox" id = "deadline_time" name = deadline_time> </p>
+        <p>How long should this task take approximately? <br> <input type = "textbox" id = "time_for_task" name = "time_for_task"> Hours </p> 
+        <p> Priority of task <select id = "priority" name = "priority">
             <option value = "default_priority"> Select a Priority</option>
             <option value = "low"> Low </option>
             <option value = "medium"> Medium </option>
             <option value = "high"> High </option>
         </select></p>
-        <p> Type of task <select>
+        <p> Type of task <select id = "task_type" name = "task_type">
             <option value = "default_task_type"> Select a Type of Task </option>
             <option value = "lecture_catch_up"> Lecture Catch Up </option>
             <option value = "summative_coursework"> Summative Coursework </option>
@@ -62,23 +63,23 @@ function taskButtonClicked() {
             <option value = "revision"> Revision </option>
             <option value = "other"> Other </option>
         </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox"> </p>
-        <p><input type = "submit" value = "Add this task"></p>
+        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "task_module" name = "task_module"> </p>
+        <p><input type = "submit" value = "Add this task" id = task_submit_button name = task_submit_button></p>
         </form>`;
 }
 function timeButtonClicked() {
-    loadSpace.innerHTML = `<form>
+    loadSpace.innerHTML = `<form id = "work_day_form" name = "work_day_form">
         <p> This is to say what times within the day you would be happy to work on tasks so that they are not scheduled at inappropriate times </p>
-        <p> Start Time: <input type = "time"></p>
-        <p> End Time: <input type = "time"></p>
-        <p><input type = "submit" value = "Confirm"></button></p>
+        <p> Start Time: <input type = "textbox" id = "work_start" name = "work_start"></p>
+        <p> End Time: <input type = "textbox" id = "work_end" name = "work_end"></p>
+        <p><input type = "submit" value = "Confirm" id = "work__day_submit" name = "work_day_submit"></p>
         </form>`;
 }
 function finishButtonClicked() {
-    loadSpace.innerHTML = `<form>
+    loadSpace.innerHTML = `<form id = "end_date_form" name = "end_date_form">
         <p> This is to say what date you would like to schedule tasks until. You can think of this as an ideal end date for when you would like to be caught up</p>
-        <p> End Date: <input type = "date"></p>
-        <p><input type = "submit" value = "Confirm"></p>
+        <p> End Date: <input type = "textbox" id = "end_date" name = "end_date"></p>
+        <p><input type = "submit" value = "Confirm" id = "end_date_submit" name = "end_date_submit"></p>
         </form>`;
 }
 
