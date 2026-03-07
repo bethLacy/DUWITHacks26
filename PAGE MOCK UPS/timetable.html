@@ -14,15 +14,25 @@
         <p>Add timetable commitments:</p>
         
         <!-- 
-        Day
-        Start Time
-        Length / End Time
+        Day - done
+        Start Time - done
+        Length / End Time - done
         Module?
-        Type of event
+        Type of event - done
         -->
 
         <p> Date: <input type = "date"> Start Time: <input type = "time"> End Time: <input type = "time"> </p>
-        <p> Type of Event: <input type = "textbox"></p>
+        <p> <select>
+            <option value = "default_event"> Select a Type of Event</option>
+            <option value = "lecture"> Lecture</option>
+            <option value = "practical"> Practical</option>
+            <option value = "tutorial"> Tutorial</option>
+            <option value = "seminar"> Seminar </option>
+            <option value = "other_academic"> Other Academic</option>
+            <option value = "personal"> Personal</option>
+            <option value = "fun"> Social / Fun</option>
+            <option value = "other"> Other</option>
+        </select></p>
         <p> Module: <input type = "textbox"></p> <!-- Make this appear if type of event is a lecture / practical etc.-->
         
         <p><button>Add this event</button></p>
