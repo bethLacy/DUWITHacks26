@@ -41,6 +41,36 @@ function timetableButtonClicked() {
         <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "commitment_module"> </p>
         <p><input type = "submit" id = "commitment_submit_button" name = "commitment_submit_button" value = "Add this Commitment"></p>
         </form>`;
+
+    //stuff for the form
+    const form = document.getElementById("add_commitment_form");
+    form.addEventListener('submit', async function(event){
+        event.preventDefault();
+        const formData = new FormData(form);
+        let commitment = Object.fromEntries(formData.entries());
+        const formJSON = JSON.stringify(commitment);
+
+        //only send post if the form response was all valid
+        if (await commitmentFormIsValid(formJSON)) {
+
+            const response = await fetch('http://127.0.0.1:8090/newCommitment',
+            {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: formJSON
+            });
+            if(response.ok){
+                alert("Your new commitment has been added successfully")
+            }
+            else {
+                alert("There was a problem adding the new commitment")
+            }
+
+            form.reset();
+        }
+    });
 }
 function taskButtonClicked() {
     loadSpace.innerHTML = `<form id = "add_task_form" name = "add_task_form">
@@ -66,21 +96,97 @@ function taskButtonClicked() {
         <p> Module (use "Other" for non academic events): <input type = "textbox" id = "task_module" name = "task_module"> </p>
         <p><input type = "submit" value = "Add this task" id = task_submit_button name = task_submit_button></p>
         </form>`;
+
+    //stuff for the form
+    const form = document.getElementById("add_task_form");
+    form.addEventListener('submit', async function(event){
+        event.preventDefault();
+        const formData = new FormData(form);
+        let task = Object.fromEntries(formData.entries());
+        const formJSON = JSON.stringify(task);
+
+        const response = await fetch('http://127.0.0.1:8090/newTask',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formJSON
+        });
+        if(response.ok){
+            alert("Your new task has been added successfully")
+        }
+        else {
+            alert("There was a problem adding the new task")
+        }
+
+        form.reset();
+    });
 }
 function timeButtonClicked() {
     loadSpace.innerHTML = `<form id = "work_day_form" name = "work_day_form">
-        <p> This is to say what times within the day you would be happy to work on tasks so that they are not scheduled at inappropriate times </p>
         <p> Start Time: <input type = "textbox" id = "work_start" name = "work_start"></p>
         <p> End Time: <input type = "textbox" id = "work_end" name = "work_end"></p>
         <p><input type = "submit" value = "Confirm" id = "work__day_submit" name = "work_day_submit"></p>
         </form>`;
+
+    //stuff for the form
+    const form = document.getElementById("work_day_form");
+    form.addEventListener('submit', async function(event){
+        event.preventDefault();
+        const formData = new FormData(form);
+        let day = Object.fromEntries(formData.entries());
+        const formJSON = JSON.stringify(day);
+
+        const response = await fetch('http://127.0.0.1:8090/newDaylimit',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formJSON
+        });
+        if(response.ok){
+            alert("Your day limit has been added successfully")
+        }
+        else {
+            alert("There was a problem adding the day limit")
+        }
+
+        form.reset();
+    });
 }
 function finishButtonClicked() {
     loadSpace.innerHTML = `<form id = "end_date_form" name = "end_date_form">
-        <p> This is to say what date you would like to schedule tasks until. You can think of this as an ideal end date for when you would like to be caught up</p>
         <p> End Date: <input type = "textbox" id = "end_date" name = "end_date"></p>
         <p><input type = "submit" value = "Confirm" id = "end_date_submit" name = "end_date_submit"></p>
         </form>`;
+
+    //stuff for the form
+    const form = document.getElementById("end_date_form");
+    form.addEventListener('submit', async function(event){
+        event.preventDefault();
+        const formData = new FormData(form);
+        let date = Object.fromEntries(formData.entries());
+        const formJSON = JSON.stringify(date);
+
+        const response = await fetch('http://127.0.0.1:8090/newEndDate',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formJSON
+        });
+        if(response.ok){
+            alert("Your planning period has been added successfully")
+        }
+        else {
+            alert("There was a problem adding the planning period")
+        }
+
+        form.reset();
+    });
 }
 
 timetableButton.addEventListener("click", timetableButtonClicked);
@@ -126,3 +232,21 @@ function helpButtonClicked() {
     loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>"
 }
 
+
+async function commitmentFormIsValid(formJSON) {
+    //check validity
+    const response = await fetch('http://127.0.0.1:8090/checkTime',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formJSON
+        });
+        if(response.ok){
+            return true;
+        }
+        else {
+            return false;
+        }
+}

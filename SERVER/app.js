@@ -124,7 +124,7 @@ app.post("/checkTime", function(req, res){
             res.status(200).header("Content-Type", "text/plain").send("Available");
         }
         else {
-            res.status(200).header("Content-Type", "text/plain").send("Busy");
+            res.status(400).header("Content-Type", "text/plain").send("Busy");
         }
     } 
     catch (e) 
