@@ -190,7 +190,6 @@ function toMinutes(time){
 
 //TIMETABLE ALGORITHM
 
-
 //main scheduling algorithm
 function generateTimetable(){
 
