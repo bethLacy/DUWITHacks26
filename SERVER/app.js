@@ -88,17 +88,17 @@ app.post("/newEndDate", function(req, res){
 
 app.get('/reset', function(req, res){
     try {
-        //reset task file
-        
+        // reset task file
+        fs.writeFileSync(tasksFilePath, JSON.stringify([], null, 2));
 
-        //reset commitment file
+        // reset commitment file
+        fs.writeFileSync(commitmentsFilePath, JSON.stringify([], null, 2));
 
+        // reset day limit file
+        fs.writeFileSync(dayFilePath, JSON.stringify([], null, 2));
 
-        //reset day limit file
-
-
-        //reset end date file
-
+        // reset end date file
+        fs.writeFileSync(endFilePath, JSON.stringify([], null, 2));
 
         res.status(200).header("Content-Type", "text/plain").send("The storage files were reset successfully");
     } catch (e) {
@@ -106,8 +106,33 @@ app.get('/reset', function(req, res){
     }
 });
 
+app.post("/checkTime", function(req, res){
+
+    let newTime = req.body;
+
+    try {
+        let available = true
+        //check if time slot is available
+
+        if (available) {
+            res.status(200).header("Content-Type", "text/plain").send("Available");
+        }
+        else {
+            res.status(200).header("Content-Type", "text/plain").send("Busy");
+        }
+    } 
+    catch (e) 
+    {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+
 app.get('/', function(req, resp){
    resp.send('Server is running')
 })
+
+
+
 
 module.exports = app;
