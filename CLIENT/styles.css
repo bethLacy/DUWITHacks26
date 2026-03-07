@@ -1,0 +1,94 @@
+/* CSS Styles */
+html {
+    background-color: bisque;
+}
+
+body {
+    font: 1.2em / 1.5 system-ui;
+}
+
+h1 {
+    border-bottom-width: 5px;
+    border-bottom-style: dotted;
+    border-bottom-color: rgb(118, 0, 0);
+    font-size: 4rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: normal;
+    color: rgb(118, 0, 0);
+}
+
+h2 {
+    font-style: italic;
+    font-size: 1.5rem;
+}
+
+table {
+    width:95%;
+    border-collapse: collapse;
+    background-color: rgb(255, 218, 172);
+}
+
+.tableImage {
+    width: 20%;
+    border: 3px solid rgb(118, 0, 0);
+}
+
+.tableText {
+    width: 80%;
+    border: 3px solid rgb(118, 0, 0);
+    padding-left: 2%;
+}
+
+p {
+    width: 100%;
+}
+
+img {
+    border-color:rgb(118, 0, 0);
+    width: 300px;
+    height: 300px;
+    display: flex;
+}
+
+button {
+    width: 20%;
+    border-color: rgb(118, 0, 0);
+    background-color: rgb(255, 208, 151);
+    padding: 0.15%;
+    font-size: medium;
+}
+
+a:any-link {
+    color: rgb(118, 0, 0);
+}
+
+a:hover, a:focus {
+    color: rgb(55, 0, 0);
+    text-decoration: none;
+}
+
+form {
+    background-color: rgb(255, 218, 172);
+    width: 60%;
+    border: 2px solid;
+    padding: 16px;
+    border-radius: 6px; 
+    border-width: 3px;
+    border-color: rgb(118, 0, 0);
+}
+
+input, textarea, select {
+    background-color: bisque;
+    border: 2px solid;
+    border-color: rgb(118, 0, 0);
+}
+
+.summaryBox {
+    display: flex;
+    align-items: center;
+    padding-top: 6px;
+}
+
+label {
+    padding: 5px;
+}
