@@ -14,10 +14,20 @@
 
         <h1>Planner:</h1>
         <p>Make plans wooo</p>
-        <p><button id = "button1">Upload timetable</button></p>
-        <p><button id = "button2">Add/modify tasks</button></p>
-        <p><button id = "button3">Set start and end of day</button></p>
-        <p><button id = "button4">Set scale of urgency</button></p>
+        <table>
+            <tr>
+                <td class = "tableButton"><button id = "timetableButton">Upload timetable</button></td>
+                <td class = "tableCheckbox"><input type="checkbox" id="timetableCheck" name="timetableCheck"></td>
+            </tr>
+            <tr>
+               <td class = "tableButton"><button id = "taskButton">Add/modify tasks</button></td>
+               <td class = "tableCheckbox"><input type="checkbox" id="taskCheck" name="taskCheck"></td>
+            </tr>
+            <tr>
+                <td class = "tableButton"><button id = "dayButton">Set start and end of day</button></td>
+                <td class = "tableCheckbox"><input type="checkbox" id="dayCheck" name="dayCheck"></td>
+            </tr>
+        </table>
 
         <div id = "loadSpace"></div>
 
