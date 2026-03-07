@@ -319,9 +319,9 @@ function getFreeSlots(date, commitments, startDay, endDay){
     return slots;
 }
 
-//convert task duration like "1hr" into minutes
+//convert task duration like "1" into minutes e.g. 60
 function parseDuration(str){
-    return Math.round(parseFloat(str.replace("hr","")) * 60);
+    return Math.round(parseFloat(str) * 60);
 }
 
 //parse date "9.3.26"

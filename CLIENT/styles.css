@@ -133,3 +133,12 @@ label {
     margin-top: 5%;
 }
 
+.helpWrapper {
+    text-align: center;
+    margin-top: 1%;
+    margin-bottom: 3%;
+}
+
+#helpButton {
+    width: 25%;
+}
