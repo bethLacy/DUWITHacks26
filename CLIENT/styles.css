@@ -27,14 +27,6 @@ table {
     border-collapse: collapse;
 }
 
-.tableButton {
-    width: 80%;
-}
-
-.tableCheckbox {
-    width: 20%
-}
-
 p {
     width: 100%;
 }
@@ -48,10 +40,12 @@ img {
 
 button {
     width: 100%;
+    height: 38px;                 /* match checkbox height */
     border-color: rgb(118, 0, 0);
     background-color: rgb(255, 208, 151);
-    padding: 0.15%;
     font-size: medium;
+    padding: 0 10px;              /* horizontal padding only */
+    box-sizing: border-box;
 }
 
 a:any-link {
@@ -79,12 +73,63 @@ input, textarea, select {
     border-color: rgb(118, 0, 0);
 }
 
-.summaryBox {
-    display: flex;
-    align-items: center;
-    padding-top: 6px;
-}
 
 label {
     padding: 5px;
 }
+
+
+
+.button-group{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* Hide default checkbox */
+.item input{
+  display:none;
+}
+
+/* Custom checkbox */
+.custom-box{
+  width:38px;
+  height:38px;
+  background:white;
+  border:2px solid black;
+  cursor:pointer;
+  position:relative;
+  box-sizing:border-box;
+}
+
+.item input:checked + .custom-box{
+  background: rgb(118, 0, 0);; 
+}
+
+.item input:checked + .custom-box::after{
+  content:"";
+  position:absolute;
+
+  width:10px;
+  height:18px;
+
+  border:solid bisque; 
+  border-width:0 4px 4px 0;
+
+  top:7px;
+  left:12px;
+
+  transform:rotate(45deg);
+}
+
+
+#loadSpace {
+    margin-top: 5%;
+}
+

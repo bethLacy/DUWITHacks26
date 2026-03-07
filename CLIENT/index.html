@@ -14,20 +14,29 @@
 
         <h1>Planner:</h1>
         <p>Make plans wooo</p>
-        <table>
-            <tr>
-                <td class = "tableButton"><button id = "timetableButton">Upload timetable</button></td>
-                <td class = "tableCheckbox"><input type="checkbox" id="timetableCheck" name="timetableCheck"></td>
-            </tr>
-            <tr>
-               <td class = "tableButton"><button id = "taskButton">Add/modify tasks</button></td>
-               <td class = "tableCheckbox"><input type="checkbox" id="taskCheck" name="taskCheck"></td>
-            </tr>
-            <tr>
-                <td class = "tableButton"><button id = "dayButton">Set start and end of day</button></td>
-                <td class = "tableCheckbox"><input type="checkbox" id="dayCheck" name="dayCheck"></td>
-            </tr>
-        </table>
+
+        <div class="button-group">
+
+            <label class="item">
+                <input type="checkbox" id = "timetableCheck">
+                <span class="custom-box"></span>
+                <button type="button" id = "timetableButton">Add/Modify timetable commitments</button>
+            </label>
+
+            <label class="item">
+                <input type="checkbox" id = "taskCheck">
+                <span class="custom-box"></span>
+                <button type="button" id = "taskButton">Add/Modify tasks to complete</button>
+            </label>
+
+            <label class="item">
+                <input type="checkbox" id = "timeCheck">
+                <span class="custom-box"></span>
+                <button type="button" id = "timeButton">Set times you are willing to work</button>
+            </label>
+
+        </div>
+
 
         <div id = "loadSpace"></div>
 
