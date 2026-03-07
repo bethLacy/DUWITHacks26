@@ -1,0 +1,24 @@
+{
+  "name": "duwithacks26",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/bethLacy/DUWITHacks26#readme",
+  "bugs": {
+    "url": "https://github.com/bethLacy/DUWITHacks26/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bethLacy/DUWITHacks26.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
