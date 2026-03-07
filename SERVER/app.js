@@ -133,14 +133,22 @@ app.get('/', function(req, resp){
 
 app.get('/timetable', function(req, res){
     try {
-        let timetable = generateTimetable();
-        res.status(200).header("Content-Type", "application/json").send(timetable);
+
+        let result = generateTimetable();
+
+        if(!result.success){
+            return res.status(400).json(result);
+        }
+
+        res.status(200).json(result);
+
     } catch (e) {
         res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
     }
 });
 
 
+//check available slots when adding commitments, to avoid errors later
 function checkAvailable(day, startTime, endTime){
 
     // read existing commitments
@@ -150,12 +158,12 @@ function checkAvailable(day, startTime, endTime){
     for (let commitment of commitments) {
 
         // only check the same day
-        if (commitment.day === day) {
+        if (commitment.date === day) {
 
             const start = toMinutes(startTime);
             const end = toMinutes(endTime);
-            const existingStart = toMinutes(commitment.start);
-            const existingEnd = toMinutes(commitment.end);
+            const existingStart = toMinutes(commitment.startTime);
+            const existingEnd = toMinutes(commitment.endTime);
 
             // check for overlap
             if (start < existingEnd && end > existingStart) {
@@ -167,21 +175,24 @@ function checkAvailable(day, startTime, endTime){
     return true; // no collisions
 }
 
+//convert times to minutes to allow comparison
 function toMinutes(time){
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
 }
 
 
-// ======================================================
-// ===== TIMETABLE ALGORITHM ==================
-// ======================================================
 
 
-// NEW: main scheduling algorithm
+
+
+//TIMETABLE ALGORITHM
+
+
+//main scheduling algorithm
 function generateTimetable(){
 
-    // read all stored data
+    //read all stored data
     const commitments = JSON.parse(fs.readFileSync(commitmentsFilePath, "utf8"));
     const tasks = JSON.parse(fs.readFileSync(tasksFilePath, "utf8"));
     const dayLimits = JSON.parse(fs.readFileSync(dayFilePath, "utf8"))[0];
@@ -194,7 +205,7 @@ function generateTimetable(){
     const endDate = parseDate(endDateData.endDate);
 
 
-    // NEW: sort tasks by priority then deadline
+    //sort tasks by priority then deadline
     const priorityOrder = {high:3, medium:2, low:1};
 
     tasks.sort((a,b)=>{
@@ -209,8 +220,9 @@ function generateTimetable(){
         return parseDate(a.deadline) - parseDate(b.deadline);
     });
 
+    let failedTasks = [];
 
-    // NEW: schedule each task
+    //schedule each task
     for(let task of tasks){
 
         let duration = parseDuration(task.timeToComplete);
@@ -242,6 +254,12 @@ function generateTimetable(){
                         category: task.category
                     });
 
+
+                    commitments.sort((a,b)=> {
+                        if(a.date !== b.date) return parseDate(a.date) - parseDate(b.date);
+                        return toMinutes(a.startTime) - toMinutes(b.startTime);
+                    });
+
                     placed = true;
                     break;
                 }
@@ -251,13 +269,23 @@ function generateTimetable(){
         }
 
         if(!placed){
-            throw new Error("Task could not be scheduled: " + task.name);
+            failedTasks.push(task.name);
         }
     }
 
-    return commitments;
-}
+    if (failedTasks.length > 0) {
+        return {
+            success: false,
+            message: "Some tasks could not be scheduled due to insufficient time.",
+            failedTasks: failedTasks
+        };
+    }
 
+    return {
+        success: true,
+        commitments: commitments
+    };
+}
 
 //find free time slots between commitments
 function getFreeSlots(date, commitments, startDay, endDay){
@@ -287,12 +315,10 @@ function getFreeSlots(date, commitments, startDay, endDay){
     return slots;
 }
 
-
 //convert task duration like "1hr" into minutes
 function parseDuration(str){
-    return parseInt(str.replace("hr","")) * 60;
+    return Math.round(parseFloat(str.replace("hr","")) * 60);
 }
-
 
 //parse date "9.3.26"
 function parseDate(str){
@@ -300,12 +326,10 @@ function parseDate(str){
     return new Date(`20${y}`, m-1, d);
 }
 
-
 //convert Date into "9.3.26"
 function formatDate(date){
     return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()%100}`;
 }
-
 
 //convert minutes into "HH:MM"
 function minutesToTime(min){
