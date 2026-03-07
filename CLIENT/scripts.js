@@ -100,6 +100,6 @@ helpButton.addEventListener("click", helpButtonClicked);
 function helpButtonClicked() {
     //explain the app
     loadSpace.innerHTML = "<p>Welcome to our project: Rein It In, the Rosie the Reindeer Planner</p>";
-    loadSpace.innerHTML += "<p>In order to use this planner, you will need to</p>"
+    loadSpace.innerHTML += "<p>In order to use this planner, you will need to </p>"
 }
 
