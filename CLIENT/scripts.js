@@ -27,9 +27,9 @@ const finishButton = document.getElementById("finishButton");
 
 function timetableButtonClicked() {
     loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
-        <p> Commitment name: <input type = "textbox" id = "commitment_name" name = "commitment_name"></p>
-        <p> Date: <input type = "textbox" id = "commitment_date" name = "commitment_date"> Start Time: <input type = "textbox" id = "commitment_start_time" name = "commitment_start_time"> End Time: <input type = "textbox" id = "commitment_end_time" name = "commitment_end_time"> </p>
-        <p> <select id = "commitment_type" name = "commitment_type">
+        <p> Commitment name: <input type = "textbox" id = "c0mmitment_name" name = "name"></p>
+        <p> Date: <input type = "textbox" id = "commitment_date" name = "date"> Start Time: <input type = "textbox" id = "commitment_start_time" name = "startTime"> End Time: <input type = "textbox" id = "commitment_end_time" name = "endTime"> </p>
+        <p> <select id = "commitment_type" name = "category">
             <option value = "default_commitment_type"> Select a Type of Commitment</option>
             <option value = "lecture"> Lecture</option>
             <option value = "practical"> Practical</option>
@@ -38,7 +38,7 @@ function timetableButtonClicked() {
             <option value = "societies"> Societies </option>
             <option value = "other"> Other Non Academic </option>
         </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "commitment_module"> </p>
+        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "module"> </p>
         <p><input type = "submit" id = "commitment_submit_button" name = "commitment_submit_button" value = "Add this Commitment"></p>
         </form>`;
 
