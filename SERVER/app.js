@@ -324,7 +324,7 @@ function parseDuration(str){
     return Math.round(parseFloat(str) * 60);
 }
 
-//parse date "9.3.26"
+//parse date "09.03.2026"
 function parseDate(str){
     const [d,m,y] = str.split(".");
     return new Date(`20${y}`, m-1, d);

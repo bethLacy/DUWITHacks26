@@ -70,6 +70,9 @@ function timetableButtonClicked() {
 
             form.reset();
         }
+        else {
+            alert("This time slot is not available for a new commitment, please try again");
+        }
     });
 }
 function taskButtonClicked() {
