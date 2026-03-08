@@ -295,17 +295,29 @@ async function generateButtonClicked(){
             return toMinutes(a.startTime) - toMinutes(b.startTime);
         });
 
-        // display date
-        loadSpace.innerHTML += `<p><em>${dateString}</em></p>`;
+        let html = `<p><em>${dateString}</em></p>`;
 
-        // display commitments
+        html += `<table>`;
+        html += `<tr>
+            <th>Time slot</th>
+            <th>Activity name</th>
+            <th>Module</th>
+            <th>Category</th>
+            </tr>`;
+
         for (let c of dailyCommitments) {
-            loadSpace.innerHTML += `
-            <p>
-            ${c.startTime} - ${c.endTime} : ${c.name} (${c.category})
-            </p>`;
+            html += `<tr>
+                        <td>${c.startTime} - ${c.endTime}</td>
+                        <td>${c.name}</td>
+                        <td>${c.module}</td>
+                        <td>${c.category}</td>
+                    </tr>`;
         }
-}
+
+        html += `</table>`;
+
+        loadSpace.innerHTML += html;
+        }
 }
 
 function toMinutes(time) {
