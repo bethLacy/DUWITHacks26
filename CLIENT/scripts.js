@@ -216,11 +216,6 @@ finishButton.addEventListener("click", finishButtonClicked);
 
 
 
-async function generateButtonClicked() {
-    loadSpace.innerHTML = `<p>Generated timetable goes here</p>`;
-}
-
-
 const helpButton = document.getElementById("helpButton");
 helpButton.addEventListener("click", helpButtonClicked);
 
@@ -264,4 +259,9 @@ async function reset() {
         alert("There was an issue reseting our information")
     }
 
+}
+
+
+async function generateButtonClicked() {
+    loadSpace.innerHTML = `<p>Generated timetable goes here</p>`;
 }
