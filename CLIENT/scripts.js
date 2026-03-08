@@ -263,19 +263,8 @@ async function reset() {
 
 
 async function generateButtonClicked(){
-
-    //TESTING
-    console.log("Generate clicked");
-    //TESTING
-
-
     let timetable = await getTimetable();
     let end = await getEndDate();
-
-    //TESTING
-    console.log("Timetable:", timetable);
-    console.log("End date:", end);
-    //TESTING
 
 
     if(timetable === null || end === null){
