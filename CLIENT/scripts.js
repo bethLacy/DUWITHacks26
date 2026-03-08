@@ -263,5 +263,69 @@ async function reset() {
 
 
 async function generateButtonClicked() {
-    loadSpace.innerHTML = `<p>Generated timetable goes here</p>`;
+    timetable = getTimetable();
+
+    end = getEndDate();
+    let endDate = end === "none"
+            ? endDate
+            : parseDate(end);
+
+    if (timetable === null) {
+        alert("An error occurred");
+    }
+
+    else {
+
+        loadSpace.innerHTML = ""
+
+        //loop for each day
+        for(let date = new Date(today); date <= endDate; date.setDate(date.getDate()+1)) {
+            dailyCommitments = []
+
+            //loop for each commitment
+            for (let commitment of timetable) {
+                let commitmentDate = commitment.date;
+                if (commitmentDate === date) {
+                    //this commitment needs displaying
+                    dailyCommitments.push(commitment)
+                }
+            }
+
+            //daily commitments now contains an array of all commitments on the current date
+            //we now sort these commitments into order by start time
+            dayCommitments.sort((a, b) => {
+                return toMinutes(a.startTime) - toMinutes(b.startTime);
+            });
+
+            //add html to list these
+            loadSpace.innerHTML += "<p><em>" + date + "</em></p>"
+        }
+    }
+}
+
+function toMinutes(time) {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+}
+
+async function getTimetable() {
+    try{
+        let response = await fetch('http://127.0.0.1:8090/timetable');
+        let timetable = await response.text();
+        return timetable;
+    } catch(e) {
+        alert(e);
+        return null;
+    }
+}
+
+async function getEndDate() {
+    try{
+        let response = await fetch('http://127.0.0.1:8090/endDate');
+        let endDate = await response.text();
+        return endDate;
+    } catch(e) {
+        alert(e);
+        return null;
+    }
 }

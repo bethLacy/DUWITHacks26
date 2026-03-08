@@ -108,7 +108,7 @@ app.get('/reset', function(req, res){
         fs.writeFileSync(endFilePath, JSON.stringify([], null, 2));
 
         // reset timetable file
-        fs.writeFileSync(timetableFilePath, JSON.stringify(null , null, 2));
+        fs.writeFileSync(timetableFilePath, JSON.stringify([] , null, 2));
 
         res.status(200).header("Content-Type", "text/plain").send("The storage files were reset successfully");
     } catch (e) {
@@ -153,6 +153,17 @@ app.get('/timetable', function(req, res){
         fs.writeFileSync(timetableFilePath, JSON.stringify(result.commitments, null, 2));
         res.status(200).header("Content-Type", "application/json").send(result);
 
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+
+app.get('/endDate', function(req, res){
+    try {
+        const file = fs.readFileSync(endFilePath, "utf8");
+        const endDate = JSON.parse(file);
+        res.status(200).header("Content-Type", "application/json").send(endDate);
     } catch (e) {
         res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
     }
