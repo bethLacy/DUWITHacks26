@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "name": "myTask",
+    "deadline": "10.03.2026",
+    "timeToComplete": "3",
+    "priority": "high",
+    "category": "Summative Assignment",
+    "module": "Other"
+  }
+]

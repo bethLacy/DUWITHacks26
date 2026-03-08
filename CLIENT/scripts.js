@@ -232,7 +232,7 @@ function helpButtonClicked() {
     loadSpace.innerHTML += "<p><em>2. Adding tasks:</em></p>"
     loadSpace.innerHTML += "<p>This is where you should add tasks you need to complete</p>"
     loadSpace.innerHTML += "<p>You should add all the tasks you'd like to schedule in the planning period (even non academics!)</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YYYY</p>"
+    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>"
     loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>"
     loadSpace.innerHTML += "<p>Note: you should format the duration of the tasks as a number of hours</p>"
     loadSpace.innerHTML += "<p><em>3. Setting working times:</em></p>"
@@ -241,7 +241,7 @@ function helpButtonClicked() {
     loadSpace.innerHTML += "<p><em>4. Setting the planning period:</em></p>"
     loadSpace.innerHTML += "<p>This is where you should tell us how long you want us to schedule for</p>"
     loadSpace.innerHTML += "<p>We will schedule your tasks between the current day, and the day you choose here</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YYYY</p>"
+    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>"
     loadSpace.innerHTML += "<p><em>Final notes</em></p>"
     loadSpace.innerHTML += "<p>Thank you for using our planner</p>"
     loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>"
@@ -262,45 +262,61 @@ async function reset() {
 }
 
 
-async function generateButtonClicked() {
-    timetable = getTimetable();
+async function generateButtonClicked(){
 
-    end = getEndDate();
-    let endDate = end === "none"
-            ? endDate
-            : parseDate(end);
+    //TESTING
+    console.log("Generate clicked");
+    //TESTING
 
-    if (timetable === null) {
+
+    let timetable = await getTimetable();
+    let end = await getEndDate();
+
+    //TESTING
+    console.log("Timetable:", timetable);
+    console.log("End date:", end);
+    //TESTING
+
+
+    if(timetable === null || end === null){
         alert("An error occurred");
+        return;
     }
 
-    else {
+    let today = new Date();
+    let endDate = parseDate(end);
 
-        loadSpace.innerHTML = ""
+    loadSpace.innerHTML = "";
 
-        //loop for each day
-        for(let date = new Date(today); date <= endDate; date.setDate(date.getDate()+1)) {
-            dailyCommitments = []
+    //loop through each day
+    for (let date = new Date(today); date <= endDate; date.setDate(date.getDate()+1)) {
 
-            //loop for each commitment
-            for (let commitment of timetable) {
-                let commitmentDate = commitment.date;
-                if (commitmentDate === date) {
-                    //this commitment needs displaying
-                    dailyCommitments.push(commitment)
-                }
+        let dateString = formatDate(date);
+        let dailyCommitments = [];
+
+        // collect commitments for that day
+        for (let commitment of timetable) {
+            if (commitment.date === dateString) {
+                dailyCommitments.push(commitment);
             }
-
-            //daily commitments now contains an array of all commitments on the current date
-            //we now sort these commitments into order by start time
-            dayCommitments.sort((a, b) => {
-                return toMinutes(a.startTime) - toMinutes(b.startTime);
-            });
-
-            //add html to list these
-            loadSpace.innerHTML += "<p><em>" + date + "</em></p>"
         }
-    }
+
+        // sort by start time
+        dailyCommitments.sort((a, b) => {
+            return toMinutes(a.startTime) - toMinutes(b.startTime);
+        });
+
+        // display date
+        loadSpace.innerHTML += `<p><em>${dateString}</em></p>`;
+
+        // display commitments
+        for (let c of dailyCommitments) {
+            loadSpace.innerHTML += `
+            <p>
+            ${c.startTime} - ${c.endTime} : ${c.name} (${c.category})
+            </p>`;
+        }
+}
 }
 
 function toMinutes(time) {
@@ -311,9 +327,10 @@ function toMinutes(time) {
 async function getTimetable() {
     try{
         let response = await fetch('http://127.0.0.1:8090/timetable');
-        let timetable = await response.text();
-        return timetable;
-    } catch(e) {
+        let data = await response.json();
+        return data.commitments;
+    }
+    catch(e){
         alert(e);
         return null;
     }
@@ -322,10 +339,20 @@ async function getTimetable() {
 async function getEndDate() {
     try{
         let response = await fetch('http://127.0.0.1:8090/endDate');
-        let endDate = await response.text();
-        return endDate;
-    } catch(e) {
+        let data = await response.json();
+        return data[0].endDate;
+    }
+    catch(e){
         alert(e);
         return null;
     }
+}
+
+function parseDate(str){
+    const [d,m,y] = str.split(".");
+    return new Date(y, m-1, d);
+}
+
+function formatDate(date){
+    return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()%100}`;
 }

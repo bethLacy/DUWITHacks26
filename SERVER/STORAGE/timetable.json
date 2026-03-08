@@ -1,1 +1,18 @@
-null
+[
+  {
+    "name": "myTask",
+    "date": "8.3.26",
+    "startTime": "09:00",
+    "endTime": "12:00",
+    "module": "Other",
+    "category": "Summative Assignment"
+  },
+  {
+    "name": "myCommitment",
+    "date": "9.3.26",
+    "startTime": "17:00",
+    "endTime": "19:00",
+    "category": "Other Academic",
+    "module": "Other"
+  }
+]

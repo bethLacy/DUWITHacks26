@@ -142,6 +142,9 @@ app.get('/', function(req, resp){
 })
 
 app.get('/timetable', function(req, res){
+    // reset timetable file
+    fs.writeFileSync(timetableFilePath, JSON.stringify([] , null, 2));
+    
     try {
 
         let result = generateTimetable();
