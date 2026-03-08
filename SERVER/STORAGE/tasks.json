@@ -1,18 +1,1 @@
-[
-  {
-    "name": "myTask",
-    "deadline": "10.03.2026",
-    "timeToComplete": "3",
-    "priority": "high",
-    "category": "Summative Assignment",
-    "module": "Other"
-  },
-  {
-    "name": "myNewTask",
-    "deadline": "11.3.26",
-    "timeToComplete": "5",
-    "priority": "medium",
-    "category": "Summative Coursework",
-    "module": "Computational Thinking"
-  }
-]
+[]
