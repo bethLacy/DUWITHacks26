@@ -1,19 +1,35 @@
 [
   {
+    "name": "myNewNewCommitment",
+    "date": "8.3.26",
+    "startTime": "9:00",
+    "endTime": "10:00",
+    "category": "Practical",
+    "module": "Other"
+  },
+  {
     "name": "myTask",
     "date": "8.3.26",
-    "startTime": "09:00",
-    "endTime": "12:00",
+    "startTime": "10:00",
+    "endTime": "13:00",
     "module": "Other",
     "category": "Summative Assignment"
   },
   {
     "name": "myNewTask",
     "date": "8.3.26",
-    "startTime": "12:00",
-    "endTime": "17:00",
+    "startTime": "13:00",
+    "endTime": "18:00",
     "module": "Computational Thinking",
     "category": "Summative Coursework"
+  },
+  {
+    "name": "myNewCommitment",
+    "date": "9.3.26",
+    "startTime": "9:00",
+    "endTime": "10:00",
+    "category": "Lecture",
+    "module": "Other"
   },
   {
     "name": "myCommitment",
