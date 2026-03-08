@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "name": "CT Coursework",
+    "date": "8.3.26",
+    "startTime": "08:00",
+    "endTime": "11:00",
+    "module": "CT",
+    "category": "Summative Coursework"
+  },
+  {
+    "name": "Discrete Report",
+    "date": "8.3.26",
+    "startTime": "11:00",
+    "endTime": "13:00",
+    "module": "Discrete",
+    "category": "Summative Coursework"
+  },
+  {
+    "name": "Benchtest revision",
+    "date": "8.3.26",
+    "startTime": "13:00",
+    "endTime": "15:00",
+    "module": "CT",
+    "category": "Revision"
+  },
+  {
+    "name": "PB assignment 2",
+    "date": "8.3.26",
+    "startTime": "15:00",
+    "endTime": "19:00",
+    "module": "PB",
+    "category": "Summative Coursework"
+  },
+  {
+    "name": "test",
+    "date": "9.3.2026",
+    "startTime": "11:00",
+    "endTime": "14:00",
+    "category": "Other Non Academic",
+    "module": "Other"
+  }
+]
