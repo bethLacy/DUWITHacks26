@@ -8,6 +8,14 @@
     "category": "Summative Assignment"
   },
   {
+    "name": "myNewTask",
+    "date": "8.3.26",
+    "startTime": "12:00",
+    "endTime": "17:00",
+    "module": "Computational Thinking",
+    "category": "Summative Coursework"
+  },
+  {
     "name": "myCommitment",
     "date": "9.3.26",
     "startTime": "17:00",

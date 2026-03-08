@@ -223,6 +223,7 @@ function helpButtonClicked() {
     //explain the app
     loadSpace.innerHTML = "<p><em>Introduction</em></p>"
     loadSpace.innerHTML += "<p>Welcome to our project: Rein It In, the Rosie the Reindeer Planner</p>";
+    loadSpace.innerHTML += "<p>Note: Please give all time slots in intervals of 15 minutes</p>";
     loadSpace.innerHTML += "<p>In order to use this planner, you will need to complete the 4 steps in our checklist</p>"
     loadSpace.innerHTML += "<p><em>1. Adding commitments:</em></p>"
     loadSpace.innerHTML += "<p>This is where you will need to upload all of your existing commitments, such as lectures, meetings and societies</p>"
@@ -299,19 +300,66 @@ async function generateButtonClicked(){
 
         html += `<table>`;
         html += `<tr>
-            <th>Time slot</th>
+            <th>Time</th>
             <th>Activity name</th>
             <th>Module</th>
             <th>Category</th>
-            </tr>`;
+        </tr>`;
 
-        for (let c of dailyCommitments) {
-            html += `<tr>
-                        <td>${c.startTime} - ${c.endTime}</td>
-                        <td>${c.name}</td>
-                        <td>${c.module}</td>
-                        <td>${c.category}</td>
-                    </tr>`;
+        // skip day if there are no commitments
+        if (dailyCommitments.length === 0) {
+            html += "</table>";
+            loadSpace.innerHTML += html;
+            continue;
+        }
+
+        // find start and end of timetable
+        let firstStart = Math.min(...dailyCommitments.map(c => toMinutes(c.startTime)));
+        let lastEnd = Math.max(...dailyCommitments.map(c => toMinutes(c.endTime)));
+
+        let activeCommitment = null;
+        let remainingRows = 0;
+
+        for (let minutes = firstStart; minutes < lastEnd; minutes += 15) {
+
+           let endMinutes = minutes + 15;
+
+        let startHour = Math.floor(minutes / 60);
+        let startMin = minutes % 60;
+
+        let endHour = Math.floor(endMinutes / 60);
+        let endMin = endMinutes % 60;
+
+            let timeString =
+                `${startHour}:${String(startMin).padStart(2,'0')} - ${endHour}:${String(endMin).padStart(2,'0')}`;
+
+            html += `<tr><td>${timeString}</td>`;
+
+            // check if new commitment starts now
+            let startingCommitment = dailyCommitments.find(c => toMinutes(c.startTime) === minutes);
+
+            if (startingCommitment) {
+
+                let duration = toMinutes(startingCommitment.endTime) - toMinutes(startingCommitment.startTime);
+                let rows = duration / 15;
+
+                remainingRows = rows - 1;
+                activeCommitment = startingCommitment;
+
+                html += `<td rowspan="${rows}">${startingCommitment.name}</td>
+                        <td rowspan="${rows}">${startingCommitment.module}</td>
+                        <td rowspan="${rows}">${startingCommitment.category}</td>`;
+
+            } else if (remainingRows > 0) {
+
+                remainingRows--;
+
+            } else {
+
+                html += `<td></td><td></td><td></td>`;
+            }
+
+            html += `</tr>`;
         }
 
         html += `</table>`;
