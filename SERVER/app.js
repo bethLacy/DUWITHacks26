@@ -118,7 +118,7 @@ app.post("/checkTime", function(req, res){
 
     try {
         let available = true
-        available = checkAvailable(newTime.day, newTime.start, newTime.end)
+        available = checkAvailable(newTime.date, newTime.startTime, newTime.endTime)
 
         if (available) {
             res.status(200).header("Content-Type", "text/plain").send("Available");
