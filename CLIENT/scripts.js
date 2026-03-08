@@ -140,7 +140,7 @@ function timeButtonClicked() {
         let day = Object.fromEntries(formData.entries());
         const formJSON = JSON.stringify(day);
 
-        const response = await fetch('http://127.0.0.1:8090/newDaylimit',
+        const response = await fetch('http://127.0.0.1:8090/newDayLimits',
         {
             method: 'POST',
             headers: {
@@ -191,6 +191,24 @@ function finishButtonClicked() {
     });
 }
 
+async function commitmentFormIsValid(formJSON) {
+    //check validity
+    const response = await fetch('http://127.0.0.1:8090/checkTime',
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formJSON
+        });
+        if(response.ok){
+            return true;
+        }
+        else {
+            return false;
+        }
+}
+
 timetableButton.addEventListener("click", timetableButtonClicked);
 taskButton.addEventListener("click", taskButtonClicked);
 timeButton.addEventListener("click", timeButtonClicked);
@@ -198,7 +216,7 @@ finishButton.addEventListener("click", finishButtonClicked);
 
 
 
-function generateButtonClicked() {
+async function generateButtonClicked() {
     loadSpace.innerHTML = `<p>Generated timetable goes here</p>`;
 }
 
@@ -234,21 +252,16 @@ function helpButtonClicked() {
     loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>"
 }
 
+const resetButton = document.getElementById("resetButton");
+resetButton.addEventListener("click", reset);
 
-async function commitmentFormIsValid(formJSON) {
-    //check validity
-    const response = await fetch('http://127.0.0.1:8090/checkTime',
-        {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: formJSON
-        });
-        if(response.ok){
-            return true;
-        }
-        else {
-            return false;
-        }
+async function reset() {
+    let response = await fetch ('http://127.0.0.1:8090/reset')
+    if (response.ok) {
+        alert("Information reset successfully")
+    }
+    else {
+        alert("There was an issue reseting our information")
+    }
+
 }

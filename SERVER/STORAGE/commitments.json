@@ -1,18 +1,10 @@
 [
   {
-    "name": "Calculus lecture",
+    "name": "Calculus Lecture",
     "date": "09.03.2026",
     "startTime": "14:00",
     "endTime": "15:00",
-    "module": "Calculus",
-    "category": "Lecture"
-  },
-  {
-    "name": "myCommitment",
-    "date": "09.03.2026",
-    "startTime": "15:00",
-    "endTime": "16:00",
-    "category": "lecture",
+    "category": "Lecture",
     "module": "Calculus"
   }
 ]

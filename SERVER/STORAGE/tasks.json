@@ -1,10 +1,10 @@
 [
   {
-    "name": "Calculus lecture catch up",
-    "deadline": "9.3.26",
-    "timeToComplete": "1",
+    "name": "Calculus Homework",
+    "deadline": "10.03.2026",
+    "timeToComplete": "2",
     "priority": "high",
-    "module": "Calculus",
-    "category": "Lecture catch up"
+    "category": "Summative Assignment",
+    "module": "Calculus"
   }
 ]

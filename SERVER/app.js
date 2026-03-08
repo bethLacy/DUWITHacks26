@@ -59,15 +59,19 @@ app.post("/newDayLimits", function(req, res){
     let newDayLimits = req.body;
 
     try {
-        const file = fs.readFileSync(dayFilePath, "utf8");
-        const days = JSON.parse(file);
-        days.push(newDayLimits);
-        fs.writeFileSync(dayFilePath, JSON.stringify(days, null, 2));
-        res.status(200).header("Content-Type", "text/plain").send("New day limit added");
+
+        fs.writeFileSync(dayFilePath, JSON.stringify([newDayLimits], null, 2));
+
+        res.status(200)
+            .header("Content-Type", "text/plain")
+            .send("New day limit added");
+
     } 
     catch (e) 
     {
-        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+        res.status(500)
+            .header("Content-Type", "text/plain")
+            .send("The server encountered a problem");
     }
 });
 
