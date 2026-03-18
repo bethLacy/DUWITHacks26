@@ -90,6 +90,102 @@ app.post("/checkTime", (req: Request, res: Response) => {
   }
 });
 
+app.get('/', function(req: Request, resp: Response){
+   resp.send('Server is running')
+})
+
+app.post("/newDayLimits", function(req: Request, res: Response){
+
+    let newDayLimits = req.body;
+
+    try {
+
+        fs.writeFileSync(dayFilePath, JSON.stringify([newDayLimits], null, 2));
+
+        res.status(200)
+            .header("Content-Type", "text/plain")
+            .send("New day limit added");
+
+    } 
+    catch (e) 
+    {
+        res.status(500)
+            .header("Content-Type", "text/plain")
+            .send("The server encountered a problem");
+    }
+});
+
+app.post("/newEndDate", function(req: Request, res: Response){
+
+    let newEndDate = req.body;
+
+    try {
+        const file = fs.readFileSync(endFilePath, "utf8");
+        const days = JSON.parse(file);
+        days.push(newEndDate);
+        fs.writeFileSync(endFilePath, JSON.stringify(days, null, 2));
+        res.status(200).header("Content-Type", "text/plain").send("New end date added");
+    } 
+    catch (e) 
+    {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+app.get('/reset', function(req: Request, res: Response){
+    try {
+
+        // reset task file
+        fs.writeFileSync(tasksFilePath, JSON.stringify([], null, 2));
+
+        // reset commitment file
+        fs.writeFileSync(commitmentsFilePath, JSON.stringify([], null, 2));
+
+        // reset day limit file
+        fs.writeFileSync(dayFilePath, JSON.stringify([], null, 2));
+
+        // reset end date file
+        fs.writeFileSync(endFilePath, JSON.stringify([], null, 2));
+
+        // reset timetable file
+        fs.writeFileSync(timetableFilePath, JSON.stringify([] , null, 2));
+
+        res.status(200).header("Content-Type", "text/plain").send("The storage files were reset successfully");
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+app.get('/timetable', function(req: Request, res: Response){
+    // reset timetable file
+    fs.writeFileSync(timetableFilePath, JSON.stringify([] , null, 2));
+    
+    try {
+
+        let result = generateTimetable();
+
+        if(!result.success){
+            res.status(400).header("Content-Type", "application/json").send(result);
+        }
+
+        fs.writeFileSync(timetableFilePath, JSON.stringify(result.commitments, null, 2));
+        res.status(200).header("Content-Type", "application/json").send(result);
+
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
+app.get('/endDate', function(req: Request, res: Response){
+    try {
+        const file = fs.readFileSync(endFilePath, "utf8");
+        const endDate = JSON.parse(file);
+        res.status(200).header("Content-Type", "application/json").send(endDate);
+    } catch (e) {
+        res.status(500).header("Content-Type", "text/plain").send("The server encountered a problem");
+    }
+});
+
 // ---------------- HELPERS ----------------
 
 function checkAvailable(
