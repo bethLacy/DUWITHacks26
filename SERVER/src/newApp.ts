@@ -186,7 +186,7 @@ app.get('/endDate', function(req: Request, res: Response){
     }
 });
 
-// ---------------- HELPERS ----------------
+// ---------------- FUNCTIONS ----------------
 
 function checkAvailable(
   day: string,
@@ -217,8 +217,6 @@ function toMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + m;
 }
-
-// ---------------- TIMETABLE ----------------
 
 function generateTimetable() {
   const commitments: Commitment[] = JSON.parse(
@@ -304,8 +302,6 @@ function generateTimetable() {
     ? { success: false, failedTasks }
     : { success: true, commitments };
 }
-
-// ---------------- UTIL ----------------
 
 function getFreeSlots(
   date: string,

@@ -269,63 +269,65 @@ async function generateButtonClicked(){
 
 
     if(timetable === null || end === null){
-        alert("An error occurred");
+        alert("Couldn't generate timetable :(");
         return;
     }
+    else {
 
-    let today = new Date();
-    let endDate = parseDate(end);
+        let today = new Date();
+        let endDate = parseDate(end);
 
-    loadSpace.innerHTML = "";
+        loadSpace.innerHTML = "";
 
-    //loop through each day
-    for (let date = new Date(today); date <= endDate; date.setDate(date.getDate()+1)) {
+        //loop through each day
+        for (let date = new Date(today); date <= endDate; date.setDate(date.getDate()+1)) {
 
-        let dateString = formatDate(date);
-        let dailyCommitments = [];
+            let dateString = formatDate(date);
+            let dailyCommitments = [];
 
-        // collect commitments for that day
-        for (let commitment of timetable) {
-            if (commitment.date === dateString) {
-                dailyCommitments.push(commitment);
-            }
-        }
-
-        // sort by start time
-        dailyCommitments.sort((a, b) => {
-            return toMinutes(a.startTime) - toMinutes(b.startTime);
-        });
-
-        let html = `<p><b>${dateString}</b></p>`;
-
-        html += `<table>`;
-        html += `<tr>
-            <th>Time slot</th>
-            <th>Activity name</th>
-            <th>Module</th>
-            <th>Category</th>
-        </tr>`;
-
-        // skip days with no commitments
-        if (dailyCommitments.length === 0) {
-            html += `<tr><td colspan="4">No commitments</td></tr>`;
-        } else {
-
-            for (let c of dailyCommitments) {
-                html += `<tr>
-                            <td>${c.startTime} - ${c.endTime}</td>
-                            <td>${c.name}</td>
-                            <td>${c.module}</td>
-                            <td>${c.category}</td>
-                        </tr>`;
+            // collect commitments for that day
+            for (let commitment of timetable) {
+                if (commitment.date === dateString) {
+                    dailyCommitments.push(commitment);
+                }
             }
 
-        }
+            // sort by start time
+            dailyCommitments.sort((a, b) => {
+                return toMinutes(a.startTime) - toMinutes(b.startTime);
+            });
 
-        html += `</table>`;
+            let html = `<p><b>${dateString}</b></p>`;
 
-        loadSpace.innerHTML += html;
+            html += `<table>`;
+            html += `<tr>
+                <th>Time slot</th>
+                <th>Activity name</th>
+                <th>Module</th>
+                <th>Category</th>
+            </tr>`;
+
+            // skip days with no commitments
+            if (dailyCommitments.length === 0) {
+                html += `<tr><td colspan="4">No commitments</td></tr>`;
+            } else {
+
+                for (let c of dailyCommitments) {
+                    html += `<tr>
+                                <td>${c.startTime} - ${c.endTime}</td>
+                                <td>${c.name}</td>
+                                <td>${c.module}</td>
+                                <td>${c.category}</td>
+                            </tr>`;
+                }
+
+            }
+
+            html += `</table>`;
+
+            loadSpace.innerHTML += html;
         }
+    }
 }
 
 function toMinutes(time) {
@@ -340,7 +342,7 @@ async function getTimetable() {
         return data.commitments;
     }
     catch(e){
-        alert(e);
+        alert("Did not have sufficient information to generate timetable")
         return null;
     }
 }
@@ -352,7 +354,7 @@ async function getEndDate() {
         return data[0].endDate;
     }
     catch(e){
-        alert(e);
+        alert("No end date found")
         return null;
     }
 }
