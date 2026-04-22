@@ -1,9 +1,28 @@
 "use strict";
+// ---------------- Getting HTML Elements ----------------
 const timetableCheck = document.getElementById("timetableCheck");
 const taskCheck = document.getElementById("taskCheck");
 const timeCheck = document.getElementById("timeCheck");
 const finishCheck = document.getElementById("finishCheck");
 const loadSpace = document.getElementById("loadSpace");
+const timetableButton = document.getElementById("timetableButton");
+const taskButton = document.getElementById("taskButton");
+const timeButton = document.getElementById("timeButton");
+const finishButton = document.getElementById("finishButton");
+const resetButton = document.getElementById("resetButton");
+const helpButton = document.getElementById("helpButton");
+// ---------------- Adding Listeners ----------------
+timetableCheck.addEventListener("change", checkAllBoxes);
+taskCheck.addEventListener("change", checkAllBoxes);
+timeCheck.addEventListener("change", checkAllBoxes);
+finishCheck.addEventListener("change", checkAllBoxes);
+timetableButton.addEventListener("click", timetableButtonClicked);
+taskButton.addEventListener("click", taskButtonClicked);
+timeButton.addEventListener("click", timeButtonClicked);
+finishButton.addEventListener("click", finishButtonClicked);
+resetButton.addEventListener("click", reset);
+helpButton.addEventListener("click", helpButtonClicked);
+// ---------------- Clicking buttons and stuff ----------------
 function checkAllBoxes() {
     if (timetableCheck.checked && taskCheck.checked && timeCheck.checked && finishCheck.checked) {
         loadSpace.innerHTML = '<button id="generateButton">Generate timetable</button>';
@@ -11,14 +30,6 @@ function checkAllBoxes() {
         generateButton.addEventListener("click", generateButtonClicked);
     }
 }
-timetableCheck.addEventListener("change", checkAllBoxes);
-taskCheck.addEventListener("change", checkAllBoxes);
-timeCheck.addEventListener("change", checkAllBoxes);
-finishCheck.addEventListener("change", checkAllBoxes);
-const timetableButton = document.getElementById("timetableButton");
-const taskButton = document.getElementById("taskButton");
-const timeButton = document.getElementById("timeButton");
-const finishButton = document.getElementById("finishButton");
 function timetableButtonClicked() {
     loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
         <p> Commitment name: <input type = "textbox" id = "c0mmitment_name" name = "name"></p>
@@ -154,20 +165,6 @@ function finishButtonClicked() {
         form.reset();
     });
 }
-async function commitmentFormIsValid(formJSON) {
-    const response = await fetch('http://127.0.0.1:8090/checkTime', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: formJSON
-    });
-    return response.ok;
-}
-timetableButton.addEventListener("click", timetableButtonClicked);
-taskButton.addEventListener("click", taskButtonClicked);
-timeButton.addEventListener("click", timeButtonClicked);
-finishButton.addEventListener("click", finishButtonClicked);
-const helpButton = document.getElementById("helpButton");
-helpButton.addEventListener("click", helpButtonClicked);
 function helpButtonClicked() {
     //explain the app
     loadSpace.innerHTML = "<p><em>Introduction</em></p>";
@@ -196,8 +193,7 @@ function helpButtonClicked() {
     loadSpace.innerHTML += "<p>Thank you for using our planner</p>";
     loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>";
 }
-const resetButton = document.getElementById("resetButton");
-resetButton.addEventListener("click", reset);
+// ---------------- DO STUFF IDK ----------------
 async function reset() {
     let response = await fetch('http://127.0.0.1:8090/reset');
     if (response.ok) {
@@ -253,10 +249,15 @@ async function generateButtonClicked() {
         loadSpace.innerHTML += html;
     }
 }
-function toMinutes(time) {
-    const [h, m] = time.split(":").map(Number);
-    return h * 60 + m;
+async function commitmentFormIsValid(formJSON) {
+    const response = await fetch('http://127.0.0.1:8090/checkTime', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: formJSON
+    });
+    return response.ok;
 }
+// ---------------- Get Info from Back end ----------------
 async function getTimetable() {
     try {
         let response = await fetch('http://127.0.0.1:8090/timetable');
@@ -279,10 +280,15 @@ async function getEndDate() {
         return null;
     }
 }
+// ---------------- Helpers ----------------
 function parseDate(str) {
     const [d, m, y] = str.split(".");
     return new Date(Number(y), Number(m) - 1, Number(d));
 }
 function formatDate(date) {
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear() % 100}`;
+}
+function toMinutes(time) {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
 }
