@@ -43,6 +43,10 @@ function checkAllBoxes(): void {
         const generateButton = document.getElementById("generateButton") as HTMLButtonElement;
         generateButton.addEventListener("click", generateButtonClicked);
     } 
+    else
+    {
+        loadSpace.innerHTML = "";
+    }
 }
 
 function timetableButtonClicked(): void {

@@ -29,6 +29,9 @@ function checkAllBoxes() {
         const generateButton = document.getElementById("generateButton");
         generateButton.addEventListener("click", generateButtonClicked);
     }
+    else {
+        loadSpace.innerHTML = "";
+    }
 }
 function timetableButtonClicked() {
     loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
