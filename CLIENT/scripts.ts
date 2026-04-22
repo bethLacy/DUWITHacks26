@@ -49,161 +49,194 @@ function checkAllBoxes(): void {
 }
 
 function timetableButtonClicked(): void {
-    loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
-        <p> Commitment name: <input type = "textbox" id = "c0mmitment_name" name = "name"></p>
-        <p> Date: <input type = "textbox" id = "commitment_date" name = "date"> Start Time: <input type = "textbox" id = "commitment_start_time" name = "startTime"> End Time: <input type = "textbox" id = "commitment_end_time" name = "endTime"> </p>
-        <p> <select id = "commitment_type" name = "category">
-            <option value = "default_commitment_type"> Select a Type of Commitment</option>
-            <option value = "Lecture"> Lecture</option>
-            <option value = "Practical"> Practical</option>
-            <option value = "Meeting"> Meeting </option>
-            <option value = "Other Academic"> Other Academic</option>
-            <option value = "Societies"> Societies </option>
-            <option value = "Other Non Academic"> Other Non Academic </option>
-        </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "module"> </p>
-        <p><input type = "submit" id = "commitment_submit_button" name = "commitment_submit_button" value = "Add this Commitment"></p>
-        </form>`;
+    if (timetableButton.innerHTML == "Hide form") {
+        loadSpace.innerHTML = "";
+        timetableButton.innerHTML = "Add/Modify Timetable Committments";
+    }
+    else {
+        loadSpace.innerHTML = `<form id = "add_commitment_form" name = "add_commitment_form">
+            <p> Commitment name: <input type = "textbox" id = "c0mmitment_name" name = "name"></p>
+            <p> Date: <input type = "textbox" id = "commitment_date" name = "date"> Start Time: <input type = "textbox" id = "commitment_start_time" name = "startTime"> End Time: <input type = "textbox" id = "commitment_end_time" name = "endTime"> </p>
+            <p> <select id = "commitment_type" name = "category">
+                <option value = "default_commitment_type"> Select a Type of Commitment</option>
+                <option value = "Lecture"> Lecture</option>
+                <option value = "Practical"> Practical</option>
+                <option value = "Meeting"> Meeting </option>
+                <option value = "Other Academic"> Other Academic</option>
+                <option value = "Societies"> Societies </option>
+                <option value = "Other Non Academic"> Other Non Academic </option>
+            </select></p>
+            <p> Module (use "Other" for non academic events): <input type = "textbox" id = "commitment_module" name = "module"> </p>
+            <p><input type = "submit" id = "commitment_submit_button" name = "commitment_submit_button" value = "Add this Commitment"></p>
+            </form>`;
 
-    const form = document.getElementById("add_commitment_form") as HTMLFormElement;
+        const form = document.getElementById("add_commitment_form") as HTMLFormElement;
 
-    form.addEventListener('submit', async function(event: Event){
-        event.preventDefault();
+        form.addEventListener('submit', async function(event: Event){
+            event.preventDefault();
 
-        const formData = new FormData(form);
-        let commitment = Object.fromEntries(formData.entries());
-        const formJSON = JSON.stringify(commitment);
+            const formData = new FormData(form);
+            let commitment = Object.fromEntries(formData.entries());
+            const formJSON = JSON.stringify(commitment);
 
-        if (await commitmentFormIsValid(formJSON)) {
-            const response = await fetch('http://127.0.0.1:8090/newCommitment', {
+            if (await commitmentFormIsValid(formJSON)) {
+                const response = await fetch('http://127.0.0.1:8090/newCommitment', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: formJSON
+                });
+
+                if(response.ok){
+                    alert("Your new commitment has been added successfully");
+                } else {
+                    alert("There was a problem adding the new commitment");
+                }
+
+                form.reset();
+            } else {
+                alert("This time slot is not available for a new commitment, please try again");
+            }
+            
+        });
+
+        timetableButton.innerHTML = "Hide form";
+    }
+}
+
+function taskButtonClicked(): void {
+    if (taskButton.innerHTML == "Hide form") {
+        taskButton.innerHTML = "Add/Modify Tasks to complete";
+        loadSpace.innerHTML = "";
+    }
+    else {
+        taskButton.innerHTML = "Hide form";
+
+        loadSpace.innerHTML = `<form id = "add_task_form" name = "add_task_form">
+            <p> Task Name: <input type = "textbox" id = "task_name" name = "name"></p>
+            <p> Deadline Day: <input type = "textbox" id = "deadline_day" name = "deadline"> </p>
+            <p>How long should this task take approximately? <br> <input type = "textbox" id = "time_for_task" name = "timeToComplete"> Hours </p> 
+            <p> Priority of task <select id = "priority" name = "priority">
+                <option value = "default_priority"> Select a Priority</option>
+                <option value = "low"> Low </option>
+                <option value = "medium"> Medium </option>
+                <option value = "high"> High </option>
+            </select></p>
+            <p> Type of task <select id = "task_type" name = "category">
+                <option value = "default_task_type"> Select a Type of Task </option>
+                <option value = "Lecture Catch Up"> Lecture Catch Up </option>
+                <option value = "Summative Coursework"> Summative Coursework </option>
+                <option value = "Summative Assignment"> Summative Assignment </option>
+                <option value = "Formative Assignment"> Formative Assignment </option>
+                <option value = "Revision"> Revision </option>
+                <option value = "Other"> Other </option>
+            </select></p>
+            <p> Module (use "Other" for non academic events): <input type = "textbox" id = "task_module" name = "module"> </p>
+            <p><input type = "submit" value = "Add this task" id = task_submit_button name = task_submit_button></p>
+            </form>`;
+
+        const form = document.getElementById("add_task_form") as HTMLFormElement;
+
+        form.addEventListener('submit', async function(event: Event){
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            let task = Object.fromEntries(formData.entries());
+            const formJSON = JSON.stringify(task);
+
+            const response = await fetch('http://127.0.0.1:8090/newTask', {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
                 body: formJSON
             });
 
             if(response.ok){
-                alert("Your new commitment has been added successfully");
+                alert("Your new task has been added successfully");
             } else {
-                alert("There was a problem adding the new commitment");
+                alert("There was a problem adding the new task");
             }
 
             form.reset();
-        } else {
-            alert("This time slot is not available for a new commitment, please try again");
-        }
-    });
-}
-
-function taskButtonClicked(): void {
-    loadSpace.innerHTML = `<form id = "add_task_form" name = "add_task_form">
-        <p> Task Name: <input type = "textbox" id = "task_name" name = "name"></p>
-        <p> Deadline Day: <input type = "textbox" id = "deadline_day" name = "deadline"> </p>
-        <p>How long should this task take approximately? <br> <input type = "textbox" id = "time_for_task" name = "timeToComplete"> Hours </p> 
-        <p> Priority of task <select id = "priority" name = "priority">
-            <option value = "default_priority"> Select a Priority</option>
-            <option value = "low"> Low </option>
-            <option value = "medium"> Medium </option>
-            <option value = "high"> High </option>
-        </select></p>
-        <p> Type of task <select id = "task_type" name = "category">
-            <option value = "default_task_type"> Select a Type of Task </option>
-            <option value = "Lecture Catch Up"> Lecture Catch Up </option>
-            <option value = "Summative Coursework"> Summative Coursework </option>
-            <option value = "Summative Assignment"> Summative Assignment </option>
-            <option value = "Formative Assignment"> Formative Assignment </option>
-            <option value = "Revision"> Revision </option>
-            <option value = "Other"> Other </option>
-        </select></p>
-        <p> Module (use "Other" for non academic events): <input type = "textbox" id = "task_module" name = "module"> </p>
-        <p><input type = "submit" value = "Add this task" id = task_submit_button name = task_submit_button></p>
-        </form>`;
-
-    const form = document.getElementById("add_task_form") as HTMLFormElement;
-
-    form.addEventListener('submit', async function(event: Event){
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        let task = Object.fromEntries(formData.entries());
-        const formJSON = JSON.stringify(task);
-
-        const response = await fetch('http://127.0.0.1:8090/newTask', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: formJSON
         });
-
-        if(response.ok){
-            alert("Your new task has been added successfully");
-        } else {
-            alert("There was a problem adding the new task");
-        }
-
-        form.reset();
-    });
+    }
 }
 
 function timeButtonClicked(): void {
-    loadSpace.innerHTML = `<form id = "work_day_form" name = "work_day_form">
-        <p> Start Time: <input type = "textbox" id = "work_start" name = "start of day"></p>
-        <p> End Time: <input type = "textbox" id = "work_end" name = "end of day"></p>
-        <p><input type = "submit" value = "Confirm" id = "work__day_submit" name = "work_day_submit"></p>
-        </form>`;
+    if (timeButton.innerHTML == "Hide form") {
+        timeButton.innerHTML = "Set times you are willing to work";
+        loadSpace.innerHTML = "";
+    }
+    else {
+        timeButton.innerHTML = "Hide form";
+    
 
-    const form = document.getElementById("work_day_form") as HTMLFormElement;
+        loadSpace.innerHTML = `<form id = "work_day_form" name = "work_day_form">
+            <p> Start Time: <input type = "textbox" id = "work_start" name = "start of day"></p>
+            <p> End Time: <input type = "textbox" id = "work_end" name = "end of day"></p>
+            <p><input type = "submit" value = "Confirm" id = "work__day_submit" name = "work_day_submit"></p>
+            </form>`;
 
-    form.addEventListener('submit', async function(event: Event){
-        event.preventDefault();
+        const form = document.getElementById("work_day_form") as HTMLFormElement;
 
-        const formData = new FormData(form);
-        let day = Object.fromEntries(formData.entries());
-        const formJSON = JSON.stringify(day);
+        form.addEventListener('submit', async function(event: Event){
+            event.preventDefault();
 
-        const response = await fetch('http://127.0.0.1:8090/newDayLimits', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: formJSON
+            const formData = new FormData(form);
+            let day = Object.fromEntries(formData.entries());
+            const formJSON = JSON.stringify(day);
+
+            const response = await fetch('http://127.0.0.1:8090/newDayLimits', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: formJSON
+            });
+
+            if(response.ok){
+                alert("Your day limit has been added successfully");
+            } else {
+                alert("There was a problem adding the day limit");
+            }
+
+            form.reset();
         });
-
-        if(response.ok){
-            alert("Your day limit has been added successfully");
-        } else {
-            alert("There was a problem adding the day limit");
-        }
-
-        form.reset();
-    });
+    }
 }
 
 function finishButtonClicked(): void {
-    loadSpace.innerHTML = `<form id = "end_date_form" name = "endDate">
-        <p> End Date: <input type = "textbox" id = "end_date" name = "endDate"></p>
-        <p><input type = "submit" value = "Confirm" id = "end_date_submit" name = "end_date_submit"></p>
-        </form>`;
+    if (finishButton.innerHTML == "Hide form") {
+        finishButton.innerHTML = "Set date you would like me to plan to";
+        loadSpace.innerHTML = "";
+    }
+    else {
+        finishButton.innerHTML = "Hide form";
+        loadSpace.innerHTML = `<form id = "end_date_form" name = "endDate">
+            <p> End Date: <input type = "textbox" id = "end_date" name = "endDate"></p>
+            <p><input type = "submit" value = "Confirm" id = "end_date_submit" name = "end_date_submit"></p>
+            </form>`;
 
-    const form = document.getElementById("end_date_form") as HTMLFormElement;
+        const form = document.getElementById("end_date_form") as HTMLFormElement;
 
-    form.addEventListener('submit', async function(event: Event){
-        event.preventDefault();
+        form.addEventListener('submit', async function(event: Event){
+            event.preventDefault();
 
-        const formData = new FormData(form);
-        let date = Object.fromEntries(formData.entries());
-        const formJSON = JSON.stringify(date);
+            const formData = new FormData(form);
+            let date = Object.fromEntries(formData.entries());
+            const formJSON = JSON.stringify(date);
 
-        const response = await fetch('http://127.0.0.1:8090/newEndDate', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: formJSON
+            const response = await fetch('http://127.0.0.1:8090/newEndDate', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: formJSON
+            });
+
+            if(response.ok){
+                alert("Your planning period has been added successfully");
+            } else {
+                alert("There was a problem adding the planning period");
+            }
+
+            form.reset();
         });
-
-        if(response.ok){
-            alert("Your planning period has been added successfully");
-        } else {
-            alert("There was a problem adding the planning period");
-        }
-
-        form.reset();
-    });
+    }
 }
 
 function helpButtonClicked(): void {
