@@ -13,7 +13,6 @@ const taskButton = document.getElementById("taskButton") as HTMLButtonElement;
 const timeButton = document.getElementById("timeButton") as HTMLButtonElement;
 const finishButton = document.getElementById("finishButton") as HTMLButtonElement;
 
-
 const resetButton = document.getElementById("resetButton") as HTMLButtonElement;
 const helpButton = document.getElementById("helpButton") as HTMLButtonElement;
 
@@ -208,32 +207,42 @@ function finishButtonClicked(): void {
 }
 
 function helpButtonClicked(): void {
-    //explain the app
-    loadSpace.innerHTML = "<p><em>Introduction</em></p>"
-    loadSpace.innerHTML += "<p>Welcome to our project: Rein It In, the Rosie the Reindeer Planner</p>";
-    loadSpace.innerHTML += "<p>Note: Please give all time slots in intervals of 15 minutes</p>";
-    loadSpace.innerHTML += "<p>In order to use this planner, you will need to complete the 4 steps in our checklist</p>"
-    loadSpace.innerHTML += "<p><em>1. Adding commitments:</em></p>"
-    loadSpace.innerHTML += "<p>This is where you will need to upload all of your existing commitments, such as lectures, meetings and societies</p>"
-    loadSpace.innerHTML += "<p>You should add all commitments between the start and end of your day, and until the end of the planning period  (you will define these later)</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YYYY</p>"
-    loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>"
-    loadSpace.innerHTML += "<p><em>2. Adding tasks:</em></p>"
-    loadSpace.innerHTML += "<p>This is where you should add tasks you need to complete</p>"
-    loadSpace.innerHTML += "<p>You should add all the tasks you'd like to schedule in the planning period (even non academics!)</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>"
-    loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the duration of the tasks as a number of hours</p>"
-    loadSpace.innerHTML += "<p><em>3. Setting working times:</em></p>"
-    loadSpace.innerHTML += "<p>This is where you should tell us what time you are willing to start working each morning, and how late you are willing to finish</p>"
-    loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>"
-    loadSpace.innerHTML += "<p><em>4. Setting the planning period:</em></p>"
-    loadSpace.innerHTML += "<p>This is where you should tell us how long you want us to schedule for</p>"
-    loadSpace.innerHTML += "<p>We will schedule your tasks between the current day, and the day you choose here</p>"
-    loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>"
-    loadSpace.innerHTML += "<p><em>Final notes</em></p>"
-    loadSpace.innerHTML += "<p>Thank you for using our planner</p>"
-    loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>"
+    //if help button says explain thing, then add explanation, make it say "hide explanation"
+    //else go back to original version, remove explanation
+    if (helpButton.innerHTML == "Explain this to me") {
+        //explain the app
+        loadSpace.innerHTML = "<p><em>Introduction</em></p>";
+        loadSpace.innerHTML += "<p>Welcome to our project: Rein It In, the Rosie the Reindeer Planner</p>";
+        loadSpace.innerHTML += "<p>Note: Please give all time slots in intervals of 15 minutes</p>";
+        loadSpace.innerHTML += "<p>In order to use this planner, you will need to complete the 4 steps in our checklist</p>";
+        loadSpace.innerHTML += "<p><em>1. Adding commitments:</em></p>";
+        loadSpace.innerHTML += "<p>This is where you will need to upload all of your existing commitments, such as lectures, meetings and societies</p>";
+        loadSpace.innerHTML += "<p>You should add all commitments between the start and end of your day, and until the end of the planning period  (you will define these later)</p>";
+        loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YYYY</p>";
+        loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>";
+        loadSpace.innerHTML += "<p><em>2. Adding tasks:</em></p>";
+        loadSpace.innerHTML += "<p>This is where you should add tasks you need to complete</p>";
+        loadSpace.innerHTML += "<p>You should add all the tasks you'd like to schedule in the planning period (even non academics!)</p>";
+        loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>";
+        loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>";
+        loadSpace.innerHTML += "<p>Note: you should format the duration of the tasks as a number of hours</p>";
+        loadSpace.innerHTML += "<p><em>3. Setting working times:</em></p>";
+        loadSpace.innerHTML += "<p>This is where you should tell us what time you are willing to start working each morning, and how late you are willing to finish</p>";
+        loadSpace.innerHTML += "<p>Note: you should format times as HH:MM (24 hour time)</p>";
+        loadSpace.innerHTML += "<p><em>4. Setting the planning period:</em></p>";
+        loadSpace.innerHTML += "<p>This is where you should tell us how long you want us to schedule for</p>";
+        loadSpace.innerHTML += "<p>We will schedule your tasks between the current day, and the day you choose here</p>";
+        loadSpace.innerHTML += "<p>Note: you should format the date input as DD.MM.YY or D.M.YY etc (there shouldn't be any leading zeroes)</p>";
+        loadSpace.innerHTML += "<p><em>Final notes</em></p>";
+        loadSpace.innerHTML += "<p>Thank you for using our planner</p>";
+        loadSpace.innerHTML += "<p>We hope it can help you make the greatest academic comeback of the century</p>";
+
+        helpButton.innerHTML = "Hide explanation";
+    }
+    else {
+        helpButton.innerHTML = "Explain this to me";
+        loadSpace.innerHTML = "";
+    }
 }
 
 
